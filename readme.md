@@ -8,7 +8,7 @@
 
 docs: Some thoughts
 
-templates: some template questions from the weekly exams
+templates: some template questions 
 
 
 ## Profile
