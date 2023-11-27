@@ -1,6 +1,7 @@
 # https://leetcode.cn/problems/make-lexicographically-smallest-array-by-swapping-elements/
 
 from typing import List
+from collections import defaultdict
 
 class UnionFind:
     def __init__(self,n):
