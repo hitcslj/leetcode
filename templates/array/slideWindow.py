@@ -47,3 +47,36 @@ class Solution:
                 ans += cnt1[r]
                 cnt1[r] += 1
         return ans
+
+# https://leetcode.cn/problems/count-complete-substrings
+class Solution:
+    def countCompleteSubstrings(self, word: str, k: int) -> int:
+        def f(s: str) -> int:
+            ans = 0
+            for l in range(1,27):
+                window_size = l*k
+                if window_size>len(s):
+                    break
+                freq = Counter(s[:window_size]) 
+                cc = Counter(freq.values())
+                if cc[k]==l:
+                    ans += 1
+                for in_,out in zip(s[window_size:],s):
+                    cc[freq[in_]]-=1
+                    freq[in_]+=1
+                    cc[freq[in_]]+=1
+                    cc[freq[out]]-=1
+                    freq[out]-=1
+                    cc[freq[out]]+=1
+                    if cc[k]==l:
+                        ans += 1
+            return ans
+        n = len(word)
+        ans = i = 0
+        while i<n:
+            start = i
+            i += 1
+            while i<n and abs(ord(word[i])-ord(word[i-1]))<=2:
+                i += 1
+            ans += f(word[start:i])
+        return ans
