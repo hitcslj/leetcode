@@ -1,6 +1,6 @@
 # Leetcode record
 
-> I am an amateur leetcode enthusiast. I will record my growth process in this warehouse.
+> I am an amateur leetcode enthusiast. I will record my growth process in this repo. 
 
 
 
@@ -8,7 +8,7 @@
 
 docs: Some thoughts
 
-templates: some template questions 
+Problem: Some questions that may be encountered during interviews or weekly competitions
 
 
 ## Profile
