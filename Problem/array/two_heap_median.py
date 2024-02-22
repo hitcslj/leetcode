@@ -3,7 +3,8 @@ from typing import List
 
 
 
-# https://leetcode.cn/problems/5TxKeK/?envType=daily-question&envId=2024-02-01
+# https://leetcode.cn/problems/5TxKeK/description/
+
 
 class MedianFinder:
     def __init__(self):
