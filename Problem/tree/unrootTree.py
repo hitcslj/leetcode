@@ -2,6 +2,7 @@
 
 from typing import List
 
+
 class Solution:
     def minimumTotalPrice(self, n: int, edges: List[List[int]], price: List[int], trips: List[List[int]]) -> int:
         g = [[] for _ in range(n)]
@@ -35,4 +36,46 @@ class Solution:
                     halve += nh
             return not_halve,halve
         return min(dfs(0,-1))
+
+
+# https://leetcode.cn/problems/count-valid-paths-in-a-tree
+
+from math import isqrt
+MX = 10**5+1
+isPrime = [True]*MX
+isPrime[0] = isPrime[1] = False
+for i in range(2,isqrt(MX)+1):
+    if isPrime[i]:
+        for j in range(i*i,MX,i):
+            isPrime[j] = False
+
+class Solution:
+    def countPaths(self, n: int, edges: List[List[int]]) -> int:
+        g = [[] for _ in range(n+1)]
+        for a,b in edges:
+            g[a].append(b)
+            g[b].append(a)
+        ans = 0
+        def dfs(x,pa):
+            nodes.append(x)
+            for y in g[x]:
+                if y!=pa and not isPrime[y]:
+                    dfs(y,x)
+        size = [0]*(n+1)
+        # 枚举每个节点作为根节点的合法路径
+        for i in range(1,n+1):
+            if not isPrime[i]:continue
+            cur = 0
+            for x in g[i]:
+                if isPrime[x]:continue
+                if size[x]==0:
+                    nodes = []
+                    dfs(x,i)
+                    for y in nodes:
+                        size[y] = len(nodes)
+                ans += cur * size[x]
+                cur += size[x]
+            ans += cur
+        return ans
+
 
