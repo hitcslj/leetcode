@@ -79,3 +79,32 @@ class Solution:
         return ans
 
 
+# https://leetcode.cn/problems/count-number-of-possible-root-nodes
+    
+class Solution:
+    def rootCount(self, edges: List[List[int]], guesses: List[List[int]], k: int) -> int:
+        n = len(edges)+1
+        g = [[] for _ in range(n)]
+        for a,b in edges:
+            g[a].append(b)
+            g[b].append(a)
+        guesses = {(x,y) for x,y in guesses}
+        ans = cnt0 = 0
+        def dfs(x,pa):
+            for y in g[x]:
+                if y==pa:continue
+                nonlocal cnt0
+                cnt0 += (x,y) in guesses
+                dfs(y,x)
+        dfs(0,-1)
+        def reroot(x,pa,cnt):
+            nonlocal ans
+            ans += cnt >= k #此时cnt就是以x为根的猜对次数
+            for y in g[x]:
+                if y==pa:continue
+                reroot(y,x,cnt-((x,y) in guesses) + ((y,x) in guesses))
+
+        reroot(0,-1,cnt0)
+        return ans
+
+        
