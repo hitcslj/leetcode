@@ -1,8 +1,70 @@
+from typing import List, Optional
+from math import inf
+from functools import cache
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+# https://leetcode.cn/problems/house-robber-iii/
+class Solution:
+    def rob(self, root: Optional[TreeNode]) -> int:
+        def dfs(root):
+            if not root:return [0,0]
+            left = dfs(root.left)
+            right = dfs(root.right)
+            ans = [0,0]
+            ans[0] = left[1]+right[1]+root.val
+            ans[1] = max(left)+max(right)
+            return ans # [偷，不偷]
+        return max(dfs(root))
+
+# https://leetcode.cn/problems/find-the-maximum-sum-of-node-values
+class Solution:
+    def maximumValueSum(self, nums: List[int], k: int, edges: List[List[int]]) -> int:
+        n = len(nums)
+        g = [[] for _ in range(n)]
+        for a,b in edges:
+            g[a].append(b)
+            g[b].append(a)
+        
+        def dfs(x,pa): # 不操作 pa-x， 操作 pa-x 
+            f0, f1 = 0, -inf
+            for y in g[x]:
+                if y != pa:
+                    r0, r1 = dfs(y, x)
+                    f0, f1 = max(f0 + r0, f1 + r1), max(f1 + r0, f0 + r1)
+            return max(f0 + nums[x], f1 + (nums[x] ^ k)), max(f1 + nums[x], f0 + (nums[x] ^ k))
+        return dfs(0,-1)[0]
+
+# https://leetcode.cn/problems/choose-edges-to-maximize-score-in-a-tree/
+class Solution:
+    def maxScore(self, edges: List[List[int]]) -> int:
+        n = len(edges)+1
+        g = [dict() for _ in range(n)]
+        for i,(pa,wt) in enumerate(edges):
+            if pa==-1:continue
+            g[i][pa] = wt
+            g[pa][i] = wt
+        @cache
+        def dfs(x,pa): # 不操作pa-x, 操作pa-x
+            s = 0
+            for y in g[x].keys():
+                if y!=pa:
+                    s += dfs(y,x)[0] # x-y均不操作求和
+            f0 = s  
+            f1 = s+g[x][pa] if pa!=-1 else -inf
+            for y in g[x].keys():
+                if y!=pa:
+                    r0,r1 = dfs(y,x)
+                    f0 = max(f0,s-r0+r1) # 可以选择一个x-y
+            return f0,f1
+        return dfs(0,-1)[0]
+
+
 # https://leetcode.cn/problems/minimize-the-total-price-of-the-trips/
-
-from typing import List
-
-
 class Solution:
     def minimumTotalPrice(self, n: int, edges: List[List[int]], price: List[int], trips: List[List[int]]) -> int:
         g = [[] for _ in range(n)]
@@ -37,9 +99,7 @@ class Solution:
             return not_halve,halve
         return min(dfs(0,-1))
 
-
 # https://leetcode.cn/problems/count-valid-paths-in-a-tree
-
 from math import isqrt
 MX = 10**5+1
 isPrime = [True]*MX
@@ -78,9 +138,33 @@ class Solution:
             ans += cur
         return ans
 
+# https://leetcode.cn/problems/count-pairs-of-connectable-servers-in-a-weighted-tree-network
+class Solution:
+    def countPairsOfConnectableServers(self, edges: List[List[int]], signalSpeed: int) -> List[int]:
+        n = len(edges)+1
+        g = [[] for _ in range(n)]
+        for a,b,w in edges:
+            g[a].append((b,w))
+            g[b].append((a,w))
+            
+        
+        def dfs(x,pa,curSum):
+            cur = int(curSum % signalSpeed == 0)
+            for y,w in g[x]:
+                if y!=pa:cur += dfs(y,x,curSum+w)
+            return cur
+        
+        # 考虑以每个点为根节点
+        cnt = [0]*n
+        for x in range(n):
+            s = 0
+            for y,w in g[x]:
+                child = dfs(y,x,w)
+                cnt[x] += s * child
+                s += child
+        return cnt
 
 # https://leetcode.cn/problems/count-number-of-possible-root-nodes
-    
 class Solution:
     def rootCount(self, edges: List[List[int]], guesses: List[List[int]], k: int) -> int:
         n = len(edges)+1
