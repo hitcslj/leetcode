@@ -1,6 +1,6 @@
 from typing import List
 
-# https://leetcode.cn/problems/first-day-where-you-have-been-in-all-the-rooms
+# https://leetcode.cn/problems/first-day-where-you-have-been-in-all-the-roomst
 
 class Solution:
     def firstDayBeenInAllRooms(self, nextVisit: List[int]) -> int:
