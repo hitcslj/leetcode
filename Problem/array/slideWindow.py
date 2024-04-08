@@ -80,3 +80,15 @@ class Solution:
                 i += 1
             ans += f(word[start:i])
         return ans
+
+# https://leetcode.cn/problems/minimum-number-of-operations-to-make-array-continuous
+class Solution:
+    def minOperations(self, nums: List[int]) -> int:
+        n = len(nums)
+        arr = sorted(set(nums))
+        left = ans = 0
+        for right,num in enumerate(arr):
+            while arr[left]<num-n+1:
+                left += 1
+            ans = max(ans,right-left+1)
+        return n - ans
