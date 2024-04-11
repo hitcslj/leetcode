@@ -1,4 +1,5 @@
 from typing import List
+from math import gcd
 
 class TreeAncestor:
 
@@ -29,3 +30,36 @@ class TreeAncestor:
 # Your TreeAncestor object will be instantiated and called as such:
 # obj = TreeAncestor(n, parent)
 # param_1 = obj.getKthAncestor(node,k)
+    
+
+
+# https://leetcode.cn/problems/tree-of-coprimes
+# 预处理：coprime[i] 保存 [1, MX) 中与 i 互质的所有元素
+MX = 51
+coprime = [[j for j in range(1, MX) if gcd(i, j) == 1]
+           for i in range(MX)]
+class Solution:
+    def getCoprimes(self, nums: List[int], edges: List[List[int]]) -> List[int]:
+        n = len(nums)
+        g = [[] for _ in range(n)]
+        for x,y in edges:
+            g[x].append(y)
+            g[y].append(x)
+        g[0].append(-1) # 根节点
+        mpt = [(-1,-1)]*MX
+        ans = [-1]*n
+        def dfs(x,pa,depth): # mpt保存父节点的值和最新的节点
+            val = nums[x]  # x 的节点值
+            ans[x] = max(mpt[j] for j in coprime[val])[1]
+            tmp = mpt[nums[x]]
+            mpt[nums[x]] = (depth,x)
+            for y in g[x]:
+                if y != pa:
+                    dfs(y,x,depth+1)
+            mpt[nums[x]] = tmp
+        dfs(0,-1,0)
+        return ans
+
+                
+
+
