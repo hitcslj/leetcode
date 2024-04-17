@@ -41,7 +41,6 @@ class Solution:
 
 
 
-# https://leetcode.cn/problems/minimize-malware-spread
     
 class UnionFind:
     __slots__ = "p", "size"
@@ -70,7 +69,7 @@ class UnionFind:
     def get_size(self, root: int) -> int:
         return self.size[root]
 
-
+# https://leetcode.cn/problems/minimize-malware-spread
 class Solution:
     def minMalwareSpread(self, graph: List[List[int]], initial: List[int]) -> int:
         n = len(graph)
@@ -89,3 +88,51 @@ class Solution:
                 ans = x
                 mx = sz
         return min(initial) if ans == n else ans
+
+# https://leetcode.cn/problems/minimize-malware-spread-ii
+    
+
+# 暴力算法
+class Solution:
+    def minMalwareSpread(self, graph: List[List[int]], initial: List[int]) -> int:
+        n = len(graph)
+        ans, mi = n, n
+        for x in initial:
+          uf = UnionFind(n)
+          for i in range(n):
+              for j in range(i + 1, n):
+                  if graph[i][j] and i != x and j != x:
+                      uf.union(i, j)
+          cnt = set(uf.find(num) for num in initial if num!=x)
+          sz = sum(uf.get_size(key) for key in cnt) # 被感染的节点数
+          if sz < mi or (sz == mi and x < ans):
+              ans = x
+              mi = sz
+        return min(initial) if ans == n else ans
+
+# 逆向思维，找到能够感染最多节点的节点（且cnt[root]==1, 连接的感染源之后一个）
+class Solution:
+    def minMalwareSpread(self, graph: List[List[int]], initial: List[int]) -> int:
+        n = len(graph)
+        s = set(initial)
+        uf = UnionFind(n)
+        for i in range(n):
+            if i not in s:
+                for j in range(i + 1, n):
+                    graph[i][j] and j not in s and uf.union(i, j)
+
+        g = defaultdict(set)
+        cnt = Counter()
+        for i in initial:
+            for j in range(n):
+                if j not in s and graph[i][j]:
+                    g[i].add(uf.find(j))
+            for root in g[i]:
+                cnt[root] += 1
+
+        ans, mx = 0, -1
+        for i in initial:
+            t = sum(uf.get_size(root) for root in g[i] if cnt[root] == 1)
+            if t > mx or (t == mx and i < ans):
+                ans, mx = i, t
+        return ans
