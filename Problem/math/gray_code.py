@@ -18,12 +18,12 @@ class Solution:
             ans[i] = (i >> 1) ^ i
         return ans
 
-
-def gray_encode(bytenum):
+ 
+def gray_encode(bytenum): # 1111 -> 1000
     return bytenum^(bytenum>>1)
 
 
-def gray_decode(gray):
+def gray_decode(gray): # 1000 -> 1111
         if not gray:return 0
         head = 1<<int(math.log2(gray))
         return head + gray_decode((gray^head)^(head>>1))
