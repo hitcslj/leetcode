@@ -1,6 +1,6 @@
 # Leetcode record
 
-> I am an amateur leetcode enthusiast. I will record my growth process in this repo. 
+> I am an amateur leetcode enthusiast. I will record my progress in this repo.
 
 
 
@@ -13,6 +13,8 @@ Problem: Some questions that may be encountered during interviews or weekly comp
 
 ## Profile
 
-Welcome to follow or star in my profile
+Welcome to follow my [leetcode](https://leetcode.cn/u/hitcslj/)
 
-[leetcode](https://leetcode.cn/u/hitcslj/)
+<p align="center">
+  <img src="./docs/assets/leetcode.png" width="1200px">
+</p>
