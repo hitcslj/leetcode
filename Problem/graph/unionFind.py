@@ -90,8 +90,6 @@ class Solution:
         return min(initial) if ans == n else ans
 
 # https://leetcode.cn/problems/minimize-malware-spread-ii
-    
-
 # 暴力算法
 class Solution:
     def minMalwareSpread(self, graph: List[List[int]], initial: List[int]) -> int:
