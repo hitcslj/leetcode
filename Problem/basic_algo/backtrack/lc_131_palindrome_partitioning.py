@@ -3,25 +3,18 @@ from typing import List
 
 class Solution:
     def partition(self, s: str) -> List[List[str]]:
+        n = len(s)
         def dfs(i):
-            if i==len(s):
-                res.append(path[:])
+            if i==n:
+                res.append(path.copy())
                 return 
-            for j in range(i,len(s)):
-                if isPalindrome(s,i,j):
-                    path.append(s[i:j+1])
-                else:
-                    continue
-                dfs(j+1)
-                path.pop()
-
-        def isPalindrome(s,start,end):
-            while start<=end:
-                if s[start]!=s[end]:return False
-                start+=1
-                end-=1
-            return True
-        
-        res,path=[],[]
+            for j in range(i,n):
+                t = s[i:j+1]
+                if t == t[::-1]:
+                    path.append(t)
+                    dfs(j+1)
+                    path.pop()
+        res = []
+        path = []
         dfs(0)
         return res
