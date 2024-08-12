@@ -61,3 +61,53 @@ class Solution:
             else:
                 ans.append(idx)
         return ans
+
+
+
+# https://leetcode.cn/problems/implement-magic-dictionary
+class Trie:
+    def __init__(self):
+        self.children = {}
+        self.isEnd = False
+
+    def insert(self, word):
+        node = self
+        for char in word:
+            if char not in node.children:
+                node.children[char] = Trie()
+            node = node.children[char]
+        node.isEnd = True
+
+    def search(self, word, idx, cnt):
+        if cnt > 1:
+            return False
+        if idx == len(word):
+            return cnt == 1 and self.isEnd
+        for char in self.children:
+            if char == word[idx]:
+                if self.children[char].search(word, idx + 1, cnt):
+                    return True
+            else:
+                if self.children[char].search(word, idx + 1, cnt + 1):
+                    return True
+        return False
+
+class MagicDictionary:
+
+    def __init__(self):
+        self.trie = Trie()
+
+
+    def buildDict(self, dictionary: List[str]) -> None:
+        for word in dictionary:
+            self.trie.insert(word)
+
+    def search(self, searchWord: str) -> bool:
+        return self.trie.search(searchWord, 0, 0)
+
+
+
+# Your MagicDictionary object will be instantiated and called as such:
+# obj = MagicDictionary()
+# obj.buildDict(dictionary)
+# param_2 = obj.search(searchWord)
