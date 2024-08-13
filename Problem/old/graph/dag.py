@@ -1,5 +1,6 @@
 # https://leetcode.cn/problems/detonate-the-maximum-bombs
 from typing import List
+from functools import cache
 
 class Solution:
     def maximumDetonation(self, bombs: List[List[int]]) -> int:
@@ -25,3 +26,31 @@ class Solution:
             vis = [False] * n
             ans = max(ans, dfs(i))
         return ans
+
+
+# The knows API is already defined for you.
+# return a bool, whether a knows b
+# def knows(a: int, b: int) -> bool:
+
+class Solution:
+    def findCelebrity(self, n: int) -> int:
+        @cache
+        def cachedKnows(a, b):
+            return knows(a, b)
+
+        def is_celebrity(i):
+            for j in range(n):
+                if i == j: continue
+                if cachedKnows(i, j) or not cachedKnows(j, i):
+                    return False
+            return True
+        
+        celebrity_candidate = 0
+        for i in range(1,n):
+            if cachedKnows(celebrity_candidate, i):
+                celebrity_candidate = i
+        if is_celebrity(celebrity_candidate):
+            return celebrity_candidate
+        return -1
+
+        
