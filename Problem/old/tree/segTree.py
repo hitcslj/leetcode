@@ -84,7 +84,7 @@ class RangeModule:
 # obj.removeRange(left,right)
  
 
- class Node:
+class Node:
     def __init__(self, l, r):
         self.left = None
         self.right = None
